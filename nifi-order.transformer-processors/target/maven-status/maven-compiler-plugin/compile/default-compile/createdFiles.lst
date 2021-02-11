@@ -1,0 +1,6 @@
+ru\syntez\processors\order\transformer\entities\OrderDocumentExt.class
+ru\syntez\processors\order\transformer\entities\OrderDocument.class
+ru\syntez\processors\order\transformer\MapStructConverterImpl.class
+ru\syntez\processors\order\transformer\MapStructConverter.class
+ru\syntez\processors\order\transformer\OrderTransformProcessor$OrderTransformCallback.class
+ru\syntez\processors\order\transformer\OrderTransformProcessor.class
