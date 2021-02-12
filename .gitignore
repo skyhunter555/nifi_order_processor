@@ -5,3 +5,5 @@
 /gen/
 /target/
 /out/
+/nifi-order.transformer-nar/target/
+/nifi-order.transformer-processors/target/

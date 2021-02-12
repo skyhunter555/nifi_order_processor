@@ -14,8 +14,7 @@ public interface MapStructConverter {
 
      @Mappings({
              @Mapping(source="docId",   target="documentId"),
-             @Mapping(source="docType", target="documentType"),
-             @Mapping(source="docType",  target="documentDescription")
+             @Mapping(source="docType", target="documentType")
      })
      OrderDocumentExt convert(OrderDocument orderDocument);
 

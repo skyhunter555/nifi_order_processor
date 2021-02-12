@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: ru.syntez.processors.order.transformer.OrderTransformProcessorTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.693 s - in ru.syntez.processors.order.transformer.OrderTransformProcessorTest
