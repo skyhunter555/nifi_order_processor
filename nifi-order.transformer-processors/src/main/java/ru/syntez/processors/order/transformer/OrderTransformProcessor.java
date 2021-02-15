@@ -61,7 +61,7 @@ import java.util.Set;
  * @author Skyhunter
  * @date 10.02.2021
  */
-@Tags({"example", "transform", "demo"})
+@Tags({"example", "transform", "custom", "demo"})
 @CapabilityDescription("Example demo processor to transform document order entity to other")
 @SeeAlso({})
 @ReadsAttributes({@ReadsAttribute(attribute = "", description = "")})
@@ -182,17 +182,6 @@ public class OrderTransformProcessor extends AbstractProcessor {
         }
         session.transfer(originalFlowFile, REL_ORIGINAL);
 
-        //try {
-        //    session.write(inputFlowFile, new OrderTransformCallback(useMapStruct));
-        //    session.putAttribute(inputFlowFile, "transformed", "true");
-        //    session.putAttribute(inputFlowFile, "useMapStruct", String.valueOf(useMapStruct));
-        //    session.transfer(inputFlowFile, REL_SUCCESS);
-        //    session.transfer(originalFlowFile, REL_ORIGINAL);
-        //} catch (Throwable ex) {
-        //    System.out.println("Error " + ex.getMessage());
-        //    session.transfer(inputFlowFile, REL_FAILURE);
-        //}
-
     }
 
     private List<OutputDocumentExt> transformDocument(List<OrderDocument> orderDocumentArray, boolean useMapStruct) {
@@ -212,38 +201,6 @@ public class OrderTransformProcessor extends AbstractProcessor {
         }
         return outputDocumentExtList;
     }
-
-    //private class OrderTransformCallback implements StreamCallback {
-
-    //    private final ObjectMapper xmlMapper;
-    //    private final boolean useMapStruct;
-
-    //    OrderTransformCallback(boolean useMapStruct) {
-    //        JacksonXmlModule xmlModule = new JacksonXmlModule();
-    //        xmlModule.setDefaultUseWrapper(false);
-    //        xmlMapper = new XmlMapper(xmlModule);
-    //        ((XmlMapper) xmlMapper).enable(ToXmlGenerator.Feature.WRITE_XML_DECLARATION);
-    //        this.useMapStruct = useMapStruct;
-    //    }
-
-    //    @Override
-    //    public void process(InputStream inputStream, OutputStream outputStream) throws IOException {
-    //        OrderDocument[] orderDocumentArray = xmlMapper.readValue(inputStream, OrderDocument[].class);
-    //        for (OrderDocument orderDocument : orderDocumentArray) {
-    //            OrderDocumentExt orderDocumentExt;
-    //            if (useMapStruct) {
-    //                orderDocumentExt = MapStructConverter.MAPPER.convert(orderDocument);
-    //            } else {
-    //                orderDocumentExt = new OrderDocumentExt();
-    //                orderDocumentExt.setDocumentId(orderDocument.getDocId());
-    //                orderDocumentExt.setDocumentType(orderDocument.getDocType());
-    //            }
-    //            documentCount++;
-    //            orderDocumentExt.setDocumentNumber(documentCount);
-    //            outputStream.write(xmlMapper.writeValueAsBytes(orderDocumentExt));
-    //        }
-    //    }
-    //}
 
 }
 
