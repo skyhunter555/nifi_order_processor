@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 import ru.syntez.processors.order.transformer.entities.OrderDocument;
-import ru.syntez.processors.order.transformer.entities.OrderDocumentExt;
+import ru.syntez.processors.order.transformer.entities.OutputDocumentExt;
 
 @Mapper
 public interface MapStructConverter {
@@ -16,6 +16,6 @@ public interface MapStructConverter {
              @Mapping(source="docId",   target="documentId"),
              @Mapping(source="docType", target="documentType")
      })
-     OrderDocumentExt convert(OrderDocument orderDocument);
+     OutputDocumentExt convert(OrderDocument orderDocument);
 
 }

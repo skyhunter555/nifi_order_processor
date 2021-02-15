@@ -37,17 +37,12 @@ import org.apache.nifi.processor.ProcessContext;
 import org.apache.nifi.processor.ProcessSession;
 import org.apache.nifi.processor.ProcessorInitializationContext;
 import org.apache.nifi.processor.Relationship;
-import org.apache.nifi.processor.io.InputStreamCallback;
-import org.apache.nifi.processor.io.OutputStreamCallback;
-import org.apache.nifi.processor.io.StreamCallback;
 import org.apache.nifi.processor.util.StandardValidators;
 import ru.syntez.processors.order.transformer.entities.OrderDocument;
-import ru.syntez.processors.order.transformer.entities.OrderDocumentExt;
+import ru.syntez.processors.order.transformer.entities.OutputDocumentExt;
 import ru.syntez.processors.order.transformer.entities.OrderDocumentRoot;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -153,12 +148,12 @@ public class OrderTransformProcessor extends AbstractProcessor {
 
         final boolean useMapStruct = context.getProperty(USE_MAP_STRUCT_NAME).asBoolean();
 
-        final List<OrderDocumentExt> orderDocumentExtList = new ArrayList<>();
+        final List<OutputDocumentExt> outputDocumentExtList = new ArrayList<>();
         FlowFile originalFlowFile = session.create(inputFlowFile);
 
         try (InputStream inputStream = session.read(inputFlowFile)) {
             OrderDocumentRoot orderDocumentRoot = xmlMapper.readValue(inputStream, OrderDocumentRoot.class);
-            orderDocumentExtList.addAll(transformDocument(orderDocumentRoot.getRoutingDocument(), useMapStruct));
+            outputDocumentExtList.addAll(transformDocument(orderDocumentRoot.getRoutingDocument(), useMapStruct));
         } catch (Exception ex) {
             getLogger().error("Failed to read XML string: " + ex.getMessage());
             session.write(inputFlowFile);
@@ -168,10 +163,10 @@ public class OrderTransformProcessor extends AbstractProcessor {
         // getLogger().warn("orderDocumentExtList.size(): " + orderDocumentExtList.size());
 
         List<FlowFile> newFlowFileList = new ArrayList<>();
-        for (OrderDocumentExt orderDocumentExt : orderDocumentExtList) {
+        for (OutputDocumentExt outputDocumentExt : outputDocumentExtList) {
             FlowFile splitFlowFile = session.create(inputFlowFile);
             try {
-                session.write(splitFlowFile, out -> out.write(xmlMapper.writeValueAsBytes(orderDocumentExt)));
+                session.write(splitFlowFile, out -> out.write(xmlMapper.writeValueAsBytes(outputDocumentExt)));
                 newFlowFileList.add(splitFlowFile);
             } catch (Throwable ex) {
                 session.remove(splitFlowFile);
@@ -200,22 +195,22 @@ public class OrderTransformProcessor extends AbstractProcessor {
 
     }
 
-    private List<OrderDocumentExt> transformDocument(List<OrderDocument> orderDocumentArray, boolean useMapStruct) {
-        List<OrderDocumentExt> orderDocumentExtList = new ArrayList<>();
+    private List<OutputDocumentExt> transformDocument(List<OrderDocument> orderDocumentArray, boolean useMapStruct) {
+        List<OutputDocumentExt> outputDocumentExtList = new ArrayList<>();
         for (OrderDocument orderDocument : orderDocumentArray) {
-            OrderDocumentExt orderDocumentExt;
+            OutputDocumentExt outputDocumentExt;
             if (useMapStruct) {
-                orderDocumentExt = MapStructConverter.MAPPER.convert(orderDocument);
+                outputDocumentExt = MapStructConverter.MAPPER.convert(orderDocument);
             } else {
-                orderDocumentExt = new OrderDocumentExt();
-                orderDocumentExt.setDocumentId(orderDocument.getDocId());
-                orderDocumentExt.setDocumentType(orderDocument.getDocType());
+                outputDocumentExt = new OutputDocumentExt();
+                outputDocumentExt.setDocumentId(orderDocument.getDocId());
+                outputDocumentExt.setDocumentType(orderDocument.getDocType());
             }
             documentCount++;
-            orderDocumentExt.setDocumentNumber(documentCount);
-            orderDocumentExtList.add(orderDocumentExt);
+            outputDocumentExt.setDocumentNumber(documentCount);
+            outputDocumentExtList.add(outputDocumentExt);
         }
-        return orderDocumentExtList;
+        return outputDocumentExtList;
     }
 
     //private class OrderTransformCallback implements StreamCallback {

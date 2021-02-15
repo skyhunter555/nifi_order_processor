@@ -11,10 +11,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Skyhunter
  * @date 10.02.2021
  */
-@XmlRootElement(name = "orderDocumentExt")
+@XmlRootElement(name = "OutputDocumentExt")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
-public class OrderDocumentExt {
+public class OutputDocumentExt {
     private int documentId;
     private String documentType;
     private Integer documentNumber;

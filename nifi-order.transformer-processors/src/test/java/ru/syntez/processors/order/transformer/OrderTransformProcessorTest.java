@@ -27,8 +27,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.syntez.processors.order.transformer.entities.OrderDocument;
-import ru.syntez.processors.order.transformer.entities.OrderDocumentExt;
+import ru.syntez.processors.order.transformer.entities.OutputDocumentExt;
 import ru.syntez.processors.order.transformer.entities.OrderDocumentRoot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,33 +57,33 @@ public class OrderTransformProcessorTest {
     @Test
     public void testProcessor() {
 
-        List<OrderDocumentExt> orderDocumentExtList;
+        List<OutputDocumentExt> outputDocumentExtList;
         try{
             OrderDocumentRoot orderDocumentRoot = xmlMapper.readValue(this.getClass().getResource("/docs.xml"), OrderDocumentRoot.class);
             String xml =  xmlMapper.writeValueAsString(orderDocumentRoot);
-            orderDocumentExtList = transformDocument(orderDocumentRoot.getRoutingDocument(), true);
+            outputDocumentExtList = transformDocument(orderDocumentRoot.getRoutingDocument(), true);
         } catch (Exception ex) {
-            orderDocumentExtList = new ArrayList<>();
+            outputDocumentExtList = new ArrayList<>();
             ex.printStackTrace();
         }
-        Assert.assertEquals(3, orderDocumentExtList.size());
+        Assert.assertEquals(3, outputDocumentExtList.size());
     }
 
-    private List<OrderDocumentExt> transformDocument(List<OrderDocument> orderDocumentArray,  boolean useMapStruct) {
-        List<OrderDocumentExt> orderDocumentExtList = new ArrayList<>();
+    private List<OutputDocumentExt> transformDocument(List<OrderDocument> orderDocumentArray, boolean useMapStruct) {
+        List<OutputDocumentExt> outputDocumentExtList = new ArrayList<>();
         for (OrderDocument orderDocument: orderDocumentArray) {
-            OrderDocumentExt orderDocumentExt;
+            OutputDocumentExt outputDocumentExt;
             if (useMapStruct) {
-                orderDocumentExt = MapStructConverter.MAPPER.convert(orderDocument);
+                outputDocumentExt = MapStructConverter.MAPPER.convert(orderDocument);
             } else {
-                orderDocumentExt = new OrderDocumentExt();
-                orderDocumentExt.setDocumentId(orderDocument.getDocId());
-                orderDocumentExt.setDocumentType(orderDocument.getDocType());
+                outputDocumentExt = new OutputDocumentExt();
+                outputDocumentExt.setDocumentId(orderDocument.getDocId());
+                outputDocumentExt.setDocumentType(orderDocument.getDocType());
             }
-            orderDocumentExt.setDocumentNumber(0);
-            orderDocumentExtList.add(orderDocumentExt);
+            outputDocumentExt.setDocumentNumber(0);
+            outputDocumentExtList.add(outputDocumentExt);
         }
-        return orderDocumentExtList;
+        return outputDocumentExtList;
     }
 
 }
