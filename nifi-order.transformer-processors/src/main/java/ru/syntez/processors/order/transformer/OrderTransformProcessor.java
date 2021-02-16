@@ -166,6 +166,7 @@ public class OrderTransformProcessor extends AbstractProcessor {
         for (OutputDocumentExt outputDocumentExt : outputDocumentExtList) {
             FlowFile splitFlowFile = session.create(inputFlowFile);
             try {
+                session.putAttribute(splitFlowFile, "RoutingKey", outputDocumentExt.getDocumentType());
                 session.write(splitFlowFile, out -> out.write(xmlMapper.writeValueAsBytes(outputDocumentExt)));
                 newFlowFileList.add(splitFlowFile);
             } catch (Throwable ex) {
